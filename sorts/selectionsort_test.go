@@ -6,17 +6,19 @@ import (
 	"testing"
 )
 
-func TestInsertionSort(t *testing.T) {
+func TestSelectionSort(t *testing.T) {
 
 	arrLength := 10
-
 	arr := []int{}
 
 	for i := 0; i < arrLength; i++ {
 		arr = append(arr, rand.Intn(100))
 	}
 
-	sorts.InsertionSort(arr)
+	start := 0
+	end := len(arr) - 1
+
+	sorts.SelectionSort(arr, start, end)
 
 	t.Logf("Sorted array: %v", arr)
 
@@ -28,7 +30,7 @@ func TestInsertionSort(t *testing.T) {
 
 }
 
-func BenchmarkInsertionSort(b *testing.B) {
+func BenchmarkSelectionSort(b *testing.B) {
 
 	arrLength := 10
 
@@ -40,10 +42,13 @@ func BenchmarkInsertionSort(b *testing.B) {
 
 	arrCopy := []int{}
 
+	start := 0
+	end := len(arrCopy) - 1
+
 	for i := 0; i < b.N; i++ {
 
 		copy(arrCopy, arr)
 
-		sorts.InsertionSort(arrCopy)
+		sorts.SelectionSort(arrCopy, start, end)
 	}
 }
