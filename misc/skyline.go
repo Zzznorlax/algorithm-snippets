@@ -1,5 +1,29 @@
 package misc
 
+/* Problem:
+Given n rectangular buildings in a 2-dimensional city,
+computes the skyline of these buildings, eliminating hidden lines.
+All buildings share common bottom (absolutely flat surface at height 0),
+and every building Bi (1<=i<=n) is represented by triplet (Li, Hi, Ri),
+where Li and Hi denote the x coordinates of the left and right of the ith building, and Hi denotes its height.
+A skyline of a set of n buildings is a list of x coordinates and the heights connecting them arranged in order from left to right.
+
+Example: The skyline of the buildings
+{(3, 13, 9), (1, 11, 5), (12, 7, 16), (14, 3, 25), (19, 18, 22), (2, 6, 7), (23, 13, 29), (23, 4, 28)} is
+{(1, 11), (3, 13), (9, 0), (12, 7), (16, 3), (19, 18), (22, 3), (23, 13), (29, 0)}.
+
+Note that there must be no consecutive horizontal lines of equal height in the output skyline.
+
+(a) Let the size of a skyline be the total number of elements (coordinates and heights) in its list.
+Design an algorithm for combining a skyline A of size n1 and a skyline B of size n2 into one skyline S of size O(n1+n2).
+Your algorithm should run in O(n1+n2) worst-case time. Justify the running time of your algorithm.
+
+(b) Design an O(n log n) algorithm for finding the skyline of n buildings.
+Any algorithm that requires O(n^2) running time will not receive any credit. Justify the running time of your algorithm.
+
+(c) Briefly justify the correctness of part (a) and part (b). [Hint: Loop invariant; mathematical induction.]
+*/
+
 type Point struct {
 	Pos    int
 	Height int
@@ -11,6 +35,8 @@ type Building struct {
 	Height int
 }
 
+// MergeSkylines implements the merging two skylines into one algorithm.
+// Time complexity should be O(n1 + n2).
 func MergeSkylines(a []Point, b []Point) []Point {
 
 	indexA := 0
@@ -18,12 +44,14 @@ func MergeSkylines(a []Point, b []Point) []Point {
 
 	var mergedSkyline []Point
 
+	// Loops through points in the lists of points.
 	for indexA < len(a) && indexB < len(b) {
 
 		var currentPoint Point
 		var refPointStart Point
 		var refPointEnd Point
 
+		// Finds the leftmost point and points at its both sides on the other skyline.
 		if a[indexA].Pos < b[indexB].Pos {
 			currentPoint = a[indexA]
 
@@ -47,12 +75,14 @@ func MergeSkylines(a []Point, b []Point) []Point {
 			indexB += 1
 		}
 
+		// Checks and updates the height of the point.
 		currentPoint = overwritePointHeight(currentPoint, refPointStart, refPointEnd)
 
 		mergedSkyline = append(mergedSkyline, currentPoint)
 
 	}
 
+	// Appends the rest of the points to the merged skyline.
 	if indexA == len(a) {
 		for i := indexB; i < len(b); i++ {
 			mergedSkyline = append(mergedSkyline, b[i])
@@ -68,6 +98,8 @@ func MergeSkylines(a []Point, b []Point) []Point {
 	return mergedSkyline
 }
 
+// ToSkyline implements the algorithm which convert a list of buildings to a skyline using divide and conquer
+// in order to achieve time complexity = O(n log n). In the conquer part, we use the MergeSkylines from (a).
 func ToSkyline(buildings []Building, start int, end int) []Point {
 
 	if start == end {
@@ -84,6 +116,7 @@ func ToSkyline(buildings []Building, start int, end int) []Point {
 		}
 	}
 
+	// Divides the list of building.
 	mid := (start + end) / 2
 
 	leftSkyline := ToSkyline(buildings, start, mid)
@@ -92,10 +125,12 @@ func ToSkyline(buildings []Building, start int, end int) []Point {
 	return MergeSkylines(leftSkyline, rightSkyLine)
 }
 
+// trimSkyline removes the redundant points from a merged skyline.
 func trimSkyline(skyline []Point) []Point {
 	var processedSkyline []Point
 
 	for i := 0; i < len(skyline); i++ {
+		// Skips if two consecutive points' height are the same.
 		if i >= 1 && skyline[i].Height == skyline[i-1].Height {
 			continue
 		}
