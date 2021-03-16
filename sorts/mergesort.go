@@ -32,7 +32,7 @@ func merge(arr []int, left int, mid int, right int) []int {
 		}
 	}
 
-	start := mid + 1
+	start := rightIndex
 	end := right
 	if leftIndex != mid {
 		start = leftIndex
