@@ -1,17 +1,17 @@
-# algorithm-snippets
+# Algorithms
 
 
 ### Testing
 
-- Test all sorts
+- Test all
   ```shell
-  go test ./sorts -v
+  go test -v ./...
   ```
 
 
 ### Benchmarking
 
-- Benchmark all sorts
+- Benchmark all
   ```shell
-  go test ./sorts -v -bench="."
+  go test -v ./... -bench="."
   ```

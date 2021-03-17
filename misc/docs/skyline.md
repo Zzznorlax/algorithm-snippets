@@ -1,4 +1,17 @@
-### Problem 9: Skyline
+### HW 1 Problem 9: Skyline
+
+Given n rectangular buildings in a 2-dimensional city,
+computes the skyline of these buildings, eliminating hidden lines.
+All buildings share common bottom (absolutely flat surface at height 0),
+and every building Bi (1<=i<=n) is represented by triplet (Li, Hi, Ri),
+where Li and Hi denote the x coordinates of the left and right of the ith building, and Hi denotes its height.
+A skyline of a set of n buildings is a list of x coordinates and the heights connecting them arranged in order from left to right.
+
+Example: The skyline of the buildings
+{(3, 13, 9), (1, 11, 5), (12, 7, 16), (14, 3, 25), (19, 18, 22), (2, 6, 7), (23, 13, 29), (23, 4, 28)} is
+{(1, 11), (3, 13), (9, 0), (12, 7), (16, 3), (19, 18), (22, 3), (23, 13), (29, 0)}.
+
+Note that there must be no consecutive horizontal lines of equal height in the output skyline.
 
 **(a)** Let the size of a skyline be the total number of elements (coordinates and heights) in its list.
 Design an algorithm for combining a skyline A of size n1 and a skyline B of size n2 into one skyline S of size O(n1+n2).
