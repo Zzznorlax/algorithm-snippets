@@ -1,6 +1,6 @@
 package misc
 
-/* Problem:
+/* HW 1 Problem 9:
 Given n rectangular buildings in a 2-dimensional city,
 computes the skyline of these buildings, eliminating hidden lines.
 All buildings share common bottom (absolutely flat surface at height 0),
