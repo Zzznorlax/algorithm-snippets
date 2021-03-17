@@ -24,19 +24,21 @@ Any algorithm that requires O(n^2) running time will not receive any credit. Jus
 (c) Briefly justify the correctness of part (a) and part (b). [Hint: Loop invariant; mathematical induction.]
 */
 
-type Point struct {
-	Pos    int
-	Height int
-}
-
+// Building represents a building with attributes left pos, right pos and height
 type Building struct {
 	Left   int
 	Right  int
 	Height int
 }
 
+// Point represents a point in skyline
+type Point struct {
+	Pos    int
+	Height int
+}
+
 // MergeSkylines implements the merging two skylines into one algorithm.
-// Time complexity should be O(n1 + n2).
+// Time complexity O(n1 + n2).
 func MergeSkylines(a []Point, b []Point) []Point {
 
 	indexA := 0
@@ -45,6 +47,7 @@ func MergeSkylines(a []Point, b []Point) []Point {
 	var mergedSkyline []Point
 
 	// Loops through points in the lists of points.
+	// O(n1 + n2)
 	for indexA < len(a) && indexB < len(b) {
 
 		var currentPoint Point
@@ -76,6 +79,7 @@ func MergeSkylines(a []Point, b []Point) []Point {
 		}
 
 		// Checks and updates the height of the point.
+		// O(1)
 		currentPoint = overwritePointHeight(currentPoint, refPointStart, refPointEnd)
 
 		mergedSkyline = append(mergedSkyline, currentPoint)
@@ -83,16 +87,20 @@ func MergeSkylines(a []Point, b []Point) []Point {
 	}
 
 	// Appends the rest of the points to the merged skyline.
+	// In either condition time complexity = O(n1 + n2)
 	if indexA == len(a) {
+		// O(n1 + n2)
 		for i := indexB; i < len(b); i++ {
 			mergedSkyline = append(mergedSkyline, b[i])
 		}
 	} else {
+		// O(n1 + n2)
 		for i := indexA; i < len(a); i++ {
 			mergedSkyline = append(mergedSkyline, a[i])
 		}
 	}
 
+	// O(n1 + n2)
 	mergedSkyline = trimSkyline(mergedSkyline)
 
 	return mergedSkyline
@@ -100,8 +108,10 @@ func MergeSkylines(a []Point, b []Point) []Point {
 
 // ToSkyline implements the algorithm which convert a list of buildings to a skyline using divide and conquer
 // in order to achieve time complexity = O(n log n). In the conquer part, we use the MergeSkylines from (a).
+// Time complexity = O(n log n)
 func ToSkyline(buildings []Building, start int, end int) []Point {
 
+	// O(1)
 	if start == end {
 		building := buildings[start]
 		return []Point{
@@ -119,13 +129,18 @@ func ToSkyline(buildings []Building, start int, end int) []Point {
 	// Divides the list of building.
 	mid := (start + end) / 2
 
+	// O(n log n), while n is half of the original size.
 	leftSkyline := ToSkyline(buildings, start, mid)
+
+	// O(n log n), while n is half of the original size.
 	rightSkyLine := ToSkyline(buildings, mid+1, end)
 
+	// O(n)
 	return MergeSkylines(leftSkyline, rightSkyLine)
 }
 
-// trimSkyline removes the redundant points from a merged skyline.
+// trimSkyline removes redundant points from a merged skyline.
+// Time complexity = O(n)
 func trimSkyline(skyline []Point) []Point {
 	var processedSkyline []Point
 
@@ -140,6 +155,8 @@ func trimSkyline(skyline []Point) []Point {
 	return processedSkyline
 }
 
+// overwritePointHeight compares the current point with ref points, overwrites the height of currentPoint if needed.
+// Time complexity O(1)
 func overwritePointHeight(currentPoint Point, refPointStart Point, refPointEnd Point) Point {
 	if refPointStart.Pos <= currentPoint.Pos && currentPoint.Pos <= refPointEnd.Pos {
 
